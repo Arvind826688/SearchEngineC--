@@ -3,7 +3,6 @@
 #include <iostream>
 
 int main() {
-    // Load documents from data folder
     std::vector<std::string> docs;
     std::vector<std::string> filePaths = Utils::getFilesInDirectory("./data/");
     
@@ -11,23 +10,20 @@ int main() {
         docs.push_back(Utils::readFile(filePath));
     }
 
-    // Initialize Search Engine
     SearchEngine engine;
     engine.indexDocuments(docs);
 
-    // Perform a search
     std::string query;
     std::cout << "Enter search query: ";
     std::getline(std::cin, query);
 
-    std::vector<std::string> results = engine.search(query);
-    
-    // Display results
+    std::vector<std::pair<std::string, double>> results = engine.search(query);
+
     if (results.empty()) {
         std::cout << "No results found.\n";
     } else {
-        for (const auto& result : results) {
-            std::cout << result << std::endl;
+        for (const auto& [doc, score] : results) {
+            std::cout << "Document: " << doc << " | Score: " << score << std::endl;
         }
     }
 
